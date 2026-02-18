@@ -1,1 +1,6 @@
-<Solution />
+<Solution>
+  <Project Path="Aids/Aids.csproj" Id="493e0edc-32a6-431a-b10d-c1c1d0493475" />
+  <Project Path="Data/Data.csproj" Id="0b9e3c54-5d37-4146-b2fe-1c48f2987419" />
+  <Project Path="Infra/Infra.csproj" Id="d28041d0-81ab-4f3c-af9f-aea6551dfcb9" />
+  <Project Path="Logic/Logic.csproj" Id="92309d54-40af-4724-98a2-df5f3110fd57" />
+</Solution>
