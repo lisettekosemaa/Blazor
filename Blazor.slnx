@@ -7,6 +7,10 @@
     <Project Path="Code/Razor/Razor.csproj" />
   </Folder>
   <Folder Name="/Soft/" />
+  <Folder Name="/Soft/Movies/">
+    <Project Path="Soft/Movies/Client/Movies.Client.csproj" />
+    <Project Path="Soft/Movies/Server/Movies.csproj" />
+  </Folder>
   <Folder Name="/Soft/Todo/">
     <Project Path="Soft/Todo/Client/Todo.Client.csproj" />
     <Project Path="Soft/Todo/Server/Todo.csproj" />
