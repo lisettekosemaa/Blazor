@@ -6,16 +6,18 @@
 	<AssemblyName>Abc.Soft.Web</AssemblyName>
 	<RootNamespace>Abc.Soft.Web</RootNamespace>
     <ImplicitUsings>enable</ImplicitUsings>
-    <UserSecretsId>aspnet-Abc_Soft_Web-f83d16fa-c0f6-4c1b-9e96-4d2f6b2bfa85</UserSecretsId>
+    <UserSecretsId>aspnet-Abc_Soft_Web-b11a168a-205c-40f7-bb9c-b19e472a0506</UserSecretsId>
     <BlazorDisableThrowNavigationException>true</BlazorDisableThrowNavigationException>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Components.QuickGrid.EntityFrameworkAdapter" Version="10.0.2" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="10.0.2" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="10.0.2" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="10.0.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="10.0.2" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="10.0.2" />
   </ItemGroup>
 
   <ItemGroup>
