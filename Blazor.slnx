@@ -2,11 +2,14 @@
   <Folder Name="/Code/">
     <Project Path="Code/Aids/Aids.csproj" />
     <Project Path="Code/Data/Data.csproj" />
+    <Project Path="Code/Domain/Domain.csproj" />
     <Project Path="Code/Infra/Infra.csproj" />
-    <Project Path="Code/Logic/Logic.csproj" />
-    <Project Path="Code/Razor/Razor.csproj" />
+    <Project Path="Code/Jobs/Jobs.csproj" />
+    <Project Path="Code/Shared/Shared.csproj" />
   </Folder>
   <Folder Name="/Soft/" />
+  <Folder Name="/Soft/App/" />
+  <Folder Name="/Soft/Maui/" />
   <Folder Name="/Soft/Movies/">
     <Project Path="Soft/Movies/Client/Movies.Client.csproj" />
     <Project Path="Soft/Movies/Server/Movies.csproj" />
@@ -15,6 +18,7 @@
     <Project Path="Soft/Todo/Client/Todo.Client.csproj" />
     <Project Path="Soft/Todo/Server/Todo.csproj" />
   </Folder>
+  <Folder Name="/Soft/Web/" />
   <Folder Name="/Tests/">
     <Project Path="Tests/Aids/Tests.Aids.csproj" />
   </Folder>
