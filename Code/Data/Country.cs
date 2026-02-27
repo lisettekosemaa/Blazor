@@ -2,5 +2,5 @@
 
 public class Country
 {
-    //todo: add properties
+    //todo: add properties (for Movies page)
 }

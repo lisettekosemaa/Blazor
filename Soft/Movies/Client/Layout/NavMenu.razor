@@ -1,6 +1,7 @@
 ﻿@implements IDisposable
 
 @inject NavigationManager NavigationManager
+@inject AuthenticationStateProvider AuthenticationStateProvider
 
 <div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
@@ -12,70 +13,44 @@
 
 <div class="nav-scrollable" onclick="document.querySelector('.navbar-toggler').click()">
     <nav class="nav flex-column">
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Home
-            </NavLink>
-        </div>
-        
-        <MyNavLink href="counter" IconClass="bi-plus-square-fill-nav-menu" Text="Counter"></MyNavLink>
-        
-        <MyNavLink href="weather" IconClass="bi-list-nested-nav-menu" Text="Weather"></MyNavLink>
-        
-        <MyNavLink href="movies" IconClass="bi-list-nested-nav-menu" Text="Movies"></MyNavLink>
-        
-        <MyNavLink href="auth" IconClass="bi-lock-nav-menu" Text="Auth Required"></MyNavLink>
+       
+        <MyNavLink href="" IconClass="home-icon" Text="Home" Match="NavLinkMatch.All"></MyNavLink>
+        <MyNavLink href="counter" IconClass="counter-icon" Text="Counter"></MyNavLink>
+        <MyNavLink href="weather" IconClass="list-icon" Text="Weather"></MyNavLink>
+        <MyNavLink href="movies" IconClass="movie-icon" Text="Movies"></MyNavLink>
+        <MyNavLink href="auth" IconClass="lock-icon" Text="Auth Required"></MyNavLink>
 
         <AuthorizeView>
             <Authorized>
-                <div class="nav-item px-3">
-                    <NavLink class="nav-link" href="Account/Manage">
-                        <span class="bi bi-person-fill-nav-menu" aria-hidden="true"></span> @context.User.Identity?.Name
-                    </NavLink>
-                </div>
-                <div class="nav-item px-3">
-                    <form action="Account/Logout" method="post">
+                <MyNavLink href="Account/Manage" IconClass="person-icon" Text="@Name"></MyNavLink>
+                <MyNavLink href="Account/Logout" IconClass="arrow-icon" Text="Logout">
                         <AntiforgeryToken />
                         <input type="hidden" name="ReturnUrl" value="@currentUrl" />
-                        <button type="submit" class="nav-link">
-                            <span class="bi bi-arrow-bar-left-nav-menu" aria-hidden="true"></span> Logout
-                        </button>
-                    </form>
-                </div>
+                </MyNavLink>
             </Authorized>
             <NotAuthorized>
-                <div class="nav-item px-3">
-                    <NavLink class="nav-link" href="Account/Register">
-                        <span class="bi bi-person-nav-menu" aria-hidden="true"></span> Register
-                    </NavLink>
-                </div>
-                <div class="nav-item px-3">
-                    <NavLink class="nav-link" href="Account/Login">
-                        <span class="bi bi-person-badge-nav-menu" aria-hidden="true"></span> Login
-                    </NavLink>
-                </div>
+                <MyNavLink href="Account/Register" IconClass="register-icon" Text="Register"></MyNavLink>
+                <MyNavLink href="Account/Login" IconClass="badge-icon" Text="Login"></MyNavLink>
             </NotAuthorized>
         </AuthorizeView>
     </nav>
 </div>
 
 @code {
-    private string? currentUrl;
+    private string currentUrl;
+    private string Name = string.Empty;
 
-    protected override void OnInitialized()
-    {
+    protected override async Task OnInitializedAsync() {
         currentUrl = NavigationManager.ToBaseRelativePath(NavigationManager.Uri);
         NavigationManager.LocationChanged += OnLocationChanged;
+        var context = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        Name = context.User.Identity?.Name ?? string.Empty;
     }
-
-    private void OnLocationChanged(object? sender, LocationChangedEventArgs e)
-    {
+    private void OnLocationChanged(object sender, LocationChangedEventArgs e) { 
         currentUrl = NavigationManager.ToBaseRelativePath(e.Location);
         StateHasChanged();
     }
-
-    public void Dispose()
-    {
+    public void Dispose() {
         NavigationManager.LocationChanged -= OnLocationChanged;
     }
 }

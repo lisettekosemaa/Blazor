@@ -2,5 +2,5 @@
 
 public class Currency
 {
-    //todo: add properties
+    //todo: add properties (for Movies page)
 }
