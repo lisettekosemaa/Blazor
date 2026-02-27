@@ -1,5 +1,7 @@
 ﻿@page "/movies"
+@rendermode InteractiveServer
 @using Microsoft.EntityFrameworkCore
+@attribute [ExcludeFromInteractiveRouting]
 @using Microsoft.AspNetCore.Components.QuickGrid
 @using Abc.Soft.Web.Model
 @using Abc.Soft.Web.Data
@@ -10,13 +12,16 @@
 
 <h1>Index</h1>
 
+<input type="search" @bind="titleFilter" @bind:event="oninput" />
+
 <p>
     <a href="movies/create">Create New</a>
 </p>
 
-<QuickGrid Class="table" Items="context.Movie">
-    <PropertyColumn Property="movie => movie.Title" />
-    <PropertyColumn Property="movie => movie.ReleaseDate" />
+<div>
+<QuickGrid Class="table" Items="FilteredMovies" Pagination="pagination">
+    <PropertyColumn Property="movie => movie.Title" Sortable="true" />
+    <PropertyColumn Property="movie => movie.ReleaseDate" Title="Release Date" />
     <PropertyColumn Property="movie => movie.Genre" />
     <PropertyColumn Property="movie => movie.Price" />
 
@@ -26,6 +31,9 @@
         <a href="@($"movies/delete?id={movie.Id}")">Delete</a>
     </TemplateColumn>
 </QuickGrid>
+</div>
+
+<Paginator State="pagination" />
 
 @code {
     private ApplicationDbContext context = default!;
@@ -36,4 +44,11 @@
     }
 
     public async ValueTask DisposeAsync() => await context.DisposeAsync();
+
+    private string titleFilter = string.Empty;
+
+    private IQueryable<Movie> FilteredMovies => 
+        context.Movie.Where(m => m.Title!.Contains(titleFilter));
+
+    private PaginationState pagination = new PaginationState { ItemsPerPage = 5 };
 }
