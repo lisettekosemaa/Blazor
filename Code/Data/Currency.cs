@@ -2,5 +2,5 @@
 
 public class Currency
 {
-
+    //todo: add properties
 }
