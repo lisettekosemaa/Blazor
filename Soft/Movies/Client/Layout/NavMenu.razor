@@ -1,5 +1,4 @@
 ﻿@implements IDisposable
-
 @inject NavigationManager NavigationManager
 @inject AuthenticationStateProvider AuthenticationStateProvider
 
@@ -13,13 +12,11 @@
 
 <div class="nav-scrollable" onclick="document.querySelector('.navbar-toggler').click()">
     <nav class="nav flex-column">
-       
         <MyNavLink href="" IconClass="home-icon" Text="Home" Match="NavLinkMatch.All"></MyNavLink>
         <MyNavLink href="counter" IconClass="counter-icon" Text="Counter"></MyNavLink>
         <MyNavLink href="weather" IconClass="list-icon" Text="Weather"></MyNavLink>
         <MyNavLink href="movies" IconClass="movie-icon" Text="Movies"></MyNavLink>
         <MyNavLink href="auth" IconClass="lock-icon" Text="Auth Required"></MyNavLink>
-
         <AuthorizeView>
             <Authorized>
                 <MyNavLink href="Account/Manage" IconClass="person-icon" Text="@Name"></MyNavLink>
@@ -39,7 +36,6 @@
 @code {
     private string currentUrl;
     private string Name = string.Empty;
-
     protected override async Task OnInitializedAsync() {
         currentUrl = NavigationManager.ToBaseRelativePath(NavigationManager.Uri);
         NavigationManager.LocationChanged += OnLocationChanged;
