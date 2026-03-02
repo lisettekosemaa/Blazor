@@ -1,12 +1,12 @@
 ﻿@page "/movies"
 @rendermode InteractiveServer
 @using Abc.Data
+@using Abc.Soft.Web.Data
 @using Microsoft.EntityFrameworkCore
 @attribute [ExcludeFromInteractiveRouting]
 @using Microsoft.AspNetCore.Components.QuickGrid
-@using Abc.Soft.Web.Data
 @implements IAsyncDisposable
-@inject IDbContextFactory<Abc.Soft.Web.Data.ApplicationDbContext> DbFactory
+@inject IDbContextFactory<ApplicationDbContext> DbFactory
 
 <PageTitle>Index</PageTitle>
 
