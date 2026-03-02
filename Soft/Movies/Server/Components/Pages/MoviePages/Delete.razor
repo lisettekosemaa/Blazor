@@ -19,9 +19,9 @@
     }
     else {
         <MyViewItem Label="Title" Value="@movie.Title" />
-        <MyViewItem Label="Release Date" Value="@movie.ReleaseDate" />
+        <MyViewItem Label="Release Date" Value="@movie.ReleaseDate.ToString("d")" />
         <MyViewItem Label="Genre" Value="@movie.Genre" />
-        <MyViewItem Label="Price" Value="@movie.Price" />
+        <MyViewItem Label="Price" Value="@movie.Price.ToString("C")" />
         <EditForm method="post" Model="movie" OnValidSubmit="DeleteMovie" FormName="delete" Enhance>
             <button type="submit" class="btn btn-danger" disabled="@(movie is null)">Delete</button> |
             <a href="/movies">Back to List</a>
