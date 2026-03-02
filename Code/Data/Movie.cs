@@ -15,6 +15,7 @@ namespace Abc.Data
         [RegularExpression(@"^[A-Z]+[a-zA-Z()\s-]*$")]
         public string Genre { get; set; }
         [Range(0, 100)]
+
         [DataType(DataType.Currency)]
         [Column(TypeName = "decimal(18, 2)")]
         public decimal Price { get; set; }

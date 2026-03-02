@@ -2,7 +2,7 @@
 @using Abc.Data
 @using Microsoft.EntityFrameworkCore
 @attribute [ExcludeFromInteractiveRouting]
-@inject IDbContextFactory<Abc.Soft.Web.Data.ApplicationDbContext> DbFactory
+@inject IDbContextFactory<Data.ApplicationDbContext> DbFactory
 @inject NavigationManager NavigationManager
 
 <PageTitle>Delete</PageTitle>
@@ -18,22 +18,10 @@
         <p><em>Loading...</em></p>
     }
     else {
-        <dl class="row">
-            <dt class="col-sm-2">Title</dt>
-            <dd class="col-sm-10">@movie.Title</dd>
-        </dl>
-        <dl class="row">
-            <dt class="col-sm-2">Release Date</dt>
-            <dd class="col-sm-10">@movie.ReleaseDate</dd>
-        </dl>
-        <dl class="row">
-            <dt class="col-sm-2">Genre</dt>
-            <dd class="col-sm-10">@movie.Genre</dd>
-        </dl>
-        <dl class="row">
-            <dt class="col-sm-2">Price</dt>
-            <dd class="col-sm-10">@movie.Price</dd>
-        </dl>
+        <MyViewItem Label="Title" Value="@movie.Title" />
+        <MyViewItem Label="Release Date" Value="@movie.ReleaseDate" />
+        <MyViewItem Label="Genre" Value="@movie.Genre" />
+        <MyViewItem Label="Price" Value="@movie.Price" />
         <EditForm method="post" Model="movie" OnValidSubmit="DeleteMovie" FormName="delete" Enhance>
             <button type="submit" class="btn btn-danger" disabled="@(movie is null)">Delete</button> |
             <a href="/movies">Back to List</a>
@@ -42,22 +30,14 @@
 </div>
 
 @code {
-    private Movie? movie;
-
-    [SupplyParameterFromQuery]
-    private int Id { get; set; }
-
+    private Movie movie;
+    [SupplyParameterFromQuery] private int Id { get; set; }
     protected override async Task OnInitializedAsync()
     {
         using var context = DbFactory.CreateDbContext();
         movie = await context.Movie.FirstOrDefaultAsync(m => m.Id == Id);
-
-        if (movie is null)
-        {
-            NavigationManager.NotFound();
-        }
+        if (movie is null) NavigationManager.NotFound();
     }
-
     private async Task DeleteMovie()
     {
         using var context = DbFactory.CreateDbContext();
