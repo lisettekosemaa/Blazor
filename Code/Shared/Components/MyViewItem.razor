@@ -1,29 +1,19 @@
 ﻿<dl class="row">
     <dt class="col-sm-2">@Label</dt>
     <dd class="col-sm-10">
-        @if (Value is decimal dec)
+        @if (ChildContent is not null)
         {
-            @dec.ToString("C")
-        }
-        else if (Value is System.DateOnly d)
-        {
-            @d.ToString("d")
-        }
-        else if (Value is System.DateTime dt)
-        {
-            @dt.ToString("g")
+            @ChildContent
         }
         else
         {
-            @Value.ToString()
+            @Value
         }
     </dd>
 </dl>
 
 @code {
-    [Parameter]
-    public string Label { get; set; } = string.Empty;
-
-    [Parameter]
-    public object Value { get; set; }
+    [Parameter] public string Label { get; set; } = string.Empty;
+    [Parameter] public object Value { get; set; }
+    [Parameter] public RenderFragment ChildContent { get; set; }
 }
