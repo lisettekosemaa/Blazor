@@ -28,12 +28,9 @@ namespace Abc.Tests.Data
             }
         }
 
-        private static IEnumerable<string> GetProperties() =>
-            typeof(TClass).GetProperties(PublicDeclared)
-                .Select(i => i.Name);
-        public static IEnumerable<string> GetMethods() => Array.FindAll(
-                typeof(TClass).GetMethods(PublicDeclared), 
-                i => !i.IsSpecialName)  
-                .Select(i => i.Name);
+        private static IEnumerable<string> GetProperties() 
+            => Aids.GetType.PropertyNames<TClass>(PublicDeclared);
+        public static IEnumerable<string> GetMethods() 
+            => Aids.GetType.MethodNames<TClass>(PublicDeclared, false);
     }
 }
