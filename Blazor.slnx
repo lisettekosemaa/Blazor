@@ -20,6 +20,6 @@
   </Folder>
   <Folder Name="/Soft/Web/" />
   <Folder Name="/Tests/">
-    <Project Path="Tests/Aids/Tests.Aids.csproj" />
+    <Project Path="Tests/Tests.Data/Data.csproj" />
   </Folder>
 </Solution>
