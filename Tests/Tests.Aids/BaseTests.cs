@@ -1,14 +1,8 @@
-﻿using System.Reflection;
-
-namespace Abc.Tests.Data
+﻿
+namespace Abc.Tests.Aids
 {
-    public abstract class BaseTests<TClass> where TClass : class, new()
+    public abstract class BaseTests<TClass> : TestAids<TClass> where TClass : class, new()
     {
-        private TClass obj;
-        private const BindingFlags PublicDeclared = BindingFlags.Public 
-                    | BindingFlags.Instance 
-                    | BindingFlags.DeclaredOnly
-                    | BindingFlags.Static;
         [TestInitialize] public void TestInitialize() => obj = new TClass();
         [TestMethod] public void CanCreateTest() => Assert.IsNotNull(obj);
         [TestMethod] public void IsClassCorrectTest()
@@ -27,10 +21,5 @@ namespace Abc.Tests.Data
                     Assert.Inconclusive($"{m} is not tested!");
             }
         }
-
-        private static IEnumerable<string> GetProperties() 
-            => Aids.GetType.PropertyNames<TClass>(PublicDeclared);
-        public static IEnumerable<string> GetMethods() 
-            => Aids.GetType.MethodNames<TClass>(PublicDeclared, false);
     }
 }

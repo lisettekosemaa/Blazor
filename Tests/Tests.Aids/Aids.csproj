@@ -5,14 +5,13 @@
     <LangVersion>latest</LangVersion>
     <ImplicitUsings>enable</ImplicitUsings>
 	<Nullable>disable</Nullable>
-	<AssemblyName>Abc.Tests.Data</AssemblyName>
-	<RootNamespace>Abc.Tests.Data</RootNamespace>
+	<AssemblyName>Abc.Tests.Aids</AssemblyName>
+	<RootNamespace>Abc.Tests.Aids</RootNamespace>
     <UseVSTest>true</UseVSTest>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Code\Data\Data.csproj" />
-    <ProjectReference Include="..\Tests.Aids\Aids.csproj" />
+    <ProjectReference Include="..\..\Code\Aids\Aids.csproj" />
   </ItemGroup>
 
 </Project>
