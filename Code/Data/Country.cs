@@ -1,15 +1,12 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Abc.Data.Common;
 
 namespace Abc.Data;
 
-public class Country
+public sealed class Country : NamedEntity
 {
-    public int Id { get; set; }
-
-    [Required]
-    [StringLength(60)]
-    public string Name { get; set; }
-
-    [StringLength(3)]
-    public string IsoCode { get; set; }  // nt "USA", "EST"
+    public string NumericCode { get; set; } = "";
+    public string OfficialName { get; set; } = "";
+    public string NativeName { get; set; } = "";
+    public bool IsIsoCountry { get; set; }
+    public string IsoCode { get; set; } = "";
 }
