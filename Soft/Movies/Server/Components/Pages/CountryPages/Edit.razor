@@ -1,0 +1,82 @@
+﻿@page "/movies/edit"
+@using Abc.Data
+@using Microsoft.EntityFrameworkCore
+@attribute [ExcludeFromInteractiveRouting]
+@inject IDbContextFactory<Data.ApplicationDbContext> DbFactory
+@inject NavigationManager NavigationManager
+
+<PageTitle>Edit</PageTitle>
+
+<h1>Edit</h1>
+
+<h2>Movie</h2>
+
+@if (Movie is null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div class="row">
+        <div class="col-md-4">
+            <EditForm method="post" Model="Movie" OnValidSubmit="UpdateMovie" FormName="edit" Enhance>
+                <DataAnnotationsValidator />
+                <ValidationSummary role="alert"/>
+                <input type="hidden" name="Movie.Id" value="@Movie.Id" />
+                <MyPropertyEditor TValue="string" Id="title" Label="Title:" @bind-Value="Movie.Title" />
+                <MyPropertyEditor TValue="DateOnly" Id="releasedate" Label="ReleaseDate:" @bind-Value="Movie.ReleaseDate" />
+                <MyPropertyEditor TValue="string" Id="genre" Label="Genre:" @bind-Value="Movie.Genre" />
+                <MyPropertyEditor TValue="decimal" Id="price" Label="Price:" @bind-Value="Movie.Price" />
+                <button type="submit" class="btn btn-primary">Save</button>
+            </EditForm>
+        </div>
+    </div>
+}
+
+<div>
+    <a href="/movies">Back to List</a>
+</div>
+
+@code {
+    [SupplyParameterFromQuery]
+    private int Id { get; set; }
+    [SupplyParameterFromForm]
+    private Movie Movie { get; set; }
+    protected override async Task OnInitializedAsync()
+    {
+        using var context = DbFactory.CreateDbContext();
+        Movie ??= await context.Movies.FirstOrDefaultAsync(m => m.Id == Id);
+        if (Movie is null)
+        {
+            NavigationManager.NotFound();
+        }
+    }
+
+    private async Task UpdateMovie()
+    {
+        using var context = DbFactory.CreateDbContext();
+        context.Attach(Movie!).State = EntityState.Modified;
+        try
+        {
+            await context.SaveChangesAsync();
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            if (!MovieExists(Movie!.Id))
+            {
+                NavigationManager.NotFound();
+            }
+            else
+            {
+                throw;
+            }
+        }
+        NavigationManager.NavigateTo("/movies");
+    }
+
+    private bool MovieExists(int id)
+    {
+        using var context = DbFactory.CreateDbContext();
+        return context.Movies.Any(e => e.Id == id);
+    }
+}
