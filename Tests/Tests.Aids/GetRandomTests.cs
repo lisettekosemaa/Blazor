@@ -4,8 +4,8 @@ namespace Abc.Tests.Aids
 {
     [TestClass] public sealed class GetRandomTests
     {
-        private const byte min = byte.MinValue;
-        private const byte max = byte.MaxValue;
+        private const sbyte min = sbyte.MinValue;
+        private const sbyte max = sbyte.MaxValue;
         [TestMethod] public void Int32Test() 
             => Assert.AreNotEqual(GetRandom.Int32(min, max), GetRandom.Int32(min, max));
         [TestMethod] public void Int64Test() 

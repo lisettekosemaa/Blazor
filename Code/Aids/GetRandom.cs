@@ -28,5 +28,7 @@
             if (min > max) (min, max) = (max, min);
             return r.Next(min, max);
         }
+        //Todo: Add more types: UInt8, UInt16, UInt32, UInt64, Decimal,
+        //Float, Char, String, DateTime, TimeSpan, Guid
     }
 }
