@@ -30,8 +30,7 @@
 </div>
 
 @code {
-    [SupplyParameterFromForm]
-    private Movie Movie { get; set; } = default!;
+    [SupplyParameterFromForm] private Movie Movie { get; set; } = default!;
     protected override void OnInitialized() => Movie ??= new();
     private async Task AddMovie()
     {
