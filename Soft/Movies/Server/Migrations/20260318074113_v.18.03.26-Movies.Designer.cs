@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Abc.Soft.Web.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260318072304_v.18.03.26-Movies")]
+    [Migration("20260318074113_v.18.03.26-Movies")]
     partial class v180326Movies
     {
         /// <inheritdoc />
