@@ -1,8 +1,8 @@
 ﻿@page "/countries/delete"
 @using Abc.Data
-@using Microsoft.EntityFrameworkCore
+@using Abc.Infra
 @attribute [ExcludeFromInteractiveRouting]
-@inject IDbContextFactory<Infra.ApplicationDbContext> DbFactory
+@inject ICountriesRepo Repo
 @inject NavigationManager NavigationManager
 
 <PageTitle>Delete Country</PageTitle>
@@ -31,15 +31,12 @@
     [SupplyParameterFromQuery] private Guid Id { get; set; }
     protected override async Task OnInitializedAsync()
     {
-        using var context = DbFactory.CreateDbContext();
-        country = await context.Countries.FirstOrDefaultAsync(m => m.Id == Id);
+        country = await Repo.GetAsync(Id);
         if (country is null) NavigationManager.NotFound();
     }
     private async Task DeleteCountry()
     {
-        using var context = DbFactory.CreateDbContext();
-        context.Countries.Remove(country!);
-        await context.SaveChangesAsync();
+        await Repo.DeleteAsync(country!.Id);
         NavigationManager.NavigateTo("/countries");
     }
 }

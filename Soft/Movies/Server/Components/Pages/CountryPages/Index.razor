@@ -2,11 +2,10 @@
 @rendermode InteractiveServer
 @using Abc.Data
 @using Abc.Infra
-@using Microsoft.EntityFrameworkCore
+@using System.Linq
 @attribute [ExcludeFromInteractiveRouting]
 @using Microsoft.AspNetCore.Components.QuickGrid
-@implements IAsyncDisposable
-@inject IDbContextFactory<ApplicationDbContext> DbFactory
+@inject ICountriesRepo Repo
 
 <PageTitle>Countries</PageTitle>
 
@@ -17,7 +16,7 @@
 </p>
 
 <div>
-    <QuickGrid Class="table" Items="context.Countries">
+    <QuickGrid Class="table" Items="Countries">
         <PropertyColumn Property="country => country.Name" />
         <PropertyColumn Property="country => country.Code"/>
         <PropertyColumn Property="country => country.Details" />
@@ -37,9 +36,11 @@
 </div>
 
 @code {
-    private ApplicationDbContext context = default!;
-    
-    protected override void OnInitialized() => context = DbFactory.CreateDbContext();
-    
-    public async ValueTask DisposeAsync() => await context.DisposeAsync();
+    private IQueryable<Country> Countries = Enumerable.Empty<Country>().AsQueryable();
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (Repo is null) return;
+        Countries = (await Repo.GetAsync()).AsQueryable();
+    }
 }

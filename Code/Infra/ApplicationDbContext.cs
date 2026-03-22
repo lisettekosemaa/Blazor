@@ -10,5 +10,7 @@ namespace Abc.Infra
         public DbSet<Movie> Movies { get; set; } = default!;
         public DbSet<Country> Countries { get; set; } = default!;
         public DbSet<Currency> Currencies { get; set; } = default!;
+
+        //todo: add migration for currency and update db
     }
 }
