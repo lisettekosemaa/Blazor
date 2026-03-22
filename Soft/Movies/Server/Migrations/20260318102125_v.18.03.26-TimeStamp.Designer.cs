@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Abc.Soft.Web.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260318074113_v.18.03.26-Movies")]
-    partial class v180326Movies
+    [Migration("20260318102125_v.18.03.26-TimeStamp")]
+    partial class v180326TimeStamp
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -55,11 +55,6 @@ namespace Abc.Soft.Web.Migrations
                     b.Property<string>("OfficialName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<byte[]>("Timestamp")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("rowversion");
-
                     b.Property<DateTime?>("ValidFrom")
                         .HasColumnType("datetime2");
 
@@ -91,11 +86,6 @@ namespace Abc.Soft.Web.Migrations
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18, 2)");
-
-                    b.Property<byte[]>("Timestamp")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("rowversion");
 
                     b.Property<DateTime?>("ValidFrom")
                         .HasColumnType("datetime2");

@@ -11,16 +11,7 @@ namespace Abc.Infra
         Task<TEntity> UpdateAsync(TEntity e);
         Task DeleteAsync(Guid id);
     }
-    public interface IMoviesRepo : IRepo<Movie>
-    {
-
-    }
-    public interface ICountriesRepo : IRepo<Country>
-    {
-
-    }
-    public interface ICurrenciesRepo : IRepo<Currency>
-    {
-
-    }
+    public interface IMoviesRepo : IRepo<Movie> { }
+    public interface ICountriesRepo : IRepo<Country> { }
+    public interface ICurrenciesRepo : IRepo<Currency> { }
 }
