@@ -1,8 +1,8 @@
 ﻿@page "/movies/delete"
 @using Abc.Data
-@using Microsoft.EntityFrameworkCore
+@using Abc.Infra
 @attribute [ExcludeFromInteractiveRouting]
-@inject IDbContextFactory<Infra.ApplicationDbContext> DbFactory
+@inject IMoviesRepo Repo
 @inject NavigationManager NavigationManager
 
 <PageTitle>Delete</PageTitle>
@@ -31,15 +31,12 @@
     [SupplyParameterFromQuery] private Guid Id { get; set; }
     protected override async Task OnInitializedAsync()
     {
-        using var context = DbFactory.CreateDbContext();
-        movie = await context.Movies.FirstOrDefaultAsync(m => m.Id == Id);
+        movie = await Repo.GetAsync(Id);
         if (movie is null) NavigationManager.NotFound();
     }
     private async Task DeleteMovie()
     {
-        using var context = DbFactory.CreateDbContext();
-        context.Movies.Remove(movie!);
-        await context.SaveChangesAsync();
+        await Repo.DeleteAsync(movie!.Id);
         NavigationManager.NavigateTo("/movies");
     }
 }

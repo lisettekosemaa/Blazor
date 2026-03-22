@@ -31,9 +31,6 @@
     protected override async Task OnInitializedAsync()
     {
         country = await Repo.GetAsync(Id);
-        if (country is null)
-        {
-            NavigationManager.NotFound();
-        }
+        if (country is null) NavigationManager.NotFound();
     }
 }

@@ -2,11 +2,10 @@
 @rendermode InteractiveServer
 @using Abc.Data
 @using Abc.Infra
-@using Microsoft.EntityFrameworkCore
+@using System.Linq
 @attribute [ExcludeFromInteractiveRouting]
 @using Microsoft.AspNetCore.Components.QuickGrid
-@implements IAsyncDisposable
-@inject IDbContextFactory<ApplicationDbContext> DbFactory
+@inject IMoviesRepo Repo
 
 <PageTitle>Index</PageTitle>
 
@@ -36,14 +35,14 @@
 <Paginator State="pagination" />
 
 @code {
-    private ApplicationDbContext context = default!;
-    protected override void OnInitialized()
+    private IQueryable<Movie> Movies = Enumerable.Empty<Movie>().AsQueryable();
+    protected override async Task OnInitializedAsync()
     {
-        context = DbFactory.CreateDbContext();
+        if (Repo is null) return;
+        Movies = (await Repo.GetAsync()).AsQueryable();
     }
-    public async ValueTask DisposeAsync() => await context.DisposeAsync();
     private string titleFilter = string.Empty;
     private IQueryable<Movie> FilteredMovies => 
-        context.Movies.Where(m => m.Name!.Contains(titleFilter));
+        Movies.Where(m => m.Name!.Contains(titleFilter));
     private PaginationState pagination = new PaginationState { ItemsPerPage = 5 };
 }

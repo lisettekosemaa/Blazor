@@ -1,8 +1,8 @@
 ﻿@page "/movies/edit"
 @using Abc.Data
-@using Microsoft.EntityFrameworkCore
+@using Abc.Infra
 @attribute [ExcludeFromInteractiveRouting]
-@inject IDbContextFactory<Infra.ApplicationDbContext> DbFactory
+@inject IMoviesRepo Repo
 @inject NavigationManager NavigationManager
 
 <PageTitle>Edit</PageTitle>
@@ -11,7 +11,7 @@
 
 <h2>Movie</h2>
 
-@if (Movie is null)
+@if (movie is null)
 {
     <p><em>Loading...</em></p>
 }
@@ -19,14 +19,14 @@ else
 {
     <div class="row">
         <div class="col-md-4">
-            <EditForm method="post" Model="Movie" OnValidSubmit="UpdateMovie" FormName="edit" Enhance>
+            <EditForm method="post" Model="movie" OnValidSubmit="UpdateMovie" FormName="edit" Enhance>
                 <DataAnnotationsValidator />
                 <ValidationSummary role="alert"/>
-                <input type="hidden" name="Movie.Id" value="@Movie.Id" />
-                <MyPropertyEditor TValue="string" Id="title" Label="Title:" @bind-Value="Movie.Name" />
-                <MyPropertyEditor TValue="DateTime?" Id="releasedate" Label="ReleaseDate:" @bind-Value="Movie.ValidFrom" />
-                <MyPropertyEditor TValue="string" Id="genre" Label="Genre:" @bind-Value="Movie.Genre" />
-                <MyPropertyEditor TValue="decimal" Id="price" Label="Price:" @bind-Value="Movie.Price" />
+                <input type="hidden" name="Movie.Id" value="@movie.Id" />
+                <MyPropertyEditor TValue="string" Id="title" Label="Title:" @bind-Value="movie.Name" />
+                <MyPropertyEditor TValue="DateTime?" Id="releasedate" Label="ReleaseDate:" @bind-Value="movie.ValidFrom" />
+                <MyPropertyEditor TValue="string" Id="genre" Label="Genre:" @bind-Value="movie.Genre" />
+                <MyPropertyEditor TValue="decimal" Id="price" Label="Price:" @bind-Value="movie.Price" />
                 <button type="submit" class="btn btn-primary">Save</button>
             </EditForm>
         </div>
@@ -39,42 +39,16 @@ else
 
 @code {
     [SupplyParameterFromQuery] private Guid Id { get; set; }
-    [SupplyParameterFromForm] private Movie Movie { get; set; }
+    [SupplyParameterFromForm] private Movie movie { get; set; }
     protected override async Task OnInitializedAsync()
     {
-        using var context = DbFactory.CreateDbContext();
-        Movie ??= await context.Movies.FirstOrDefaultAsync(m => m.Id == Id);
-        if (Movie is null)
-        {
-            NavigationManager.NotFound();
-        }
+        movie ??= await Repo.GetAsync(Id);
+        if (movie is null) NavigationManager.NotFound();
     }
 
     private async Task UpdateMovie()
     {
-        using var context = DbFactory.CreateDbContext();
-        context.Attach(Movie!).State = EntityState.Modified;
-        try
-        {
-            await context.SaveChangesAsync();
-        }
-        catch (DbUpdateConcurrencyException)
-        {
-            if (!MovieExists(Movie!.Id))
-            {
-                NavigationManager.NotFound();
-            }
-            else
-            {
-                throw;
-            }
-        }
+        await Repo.UpdateAsync(movie!);
         NavigationManager.NavigateTo("/movies");
-    }
-
-    private bool MovieExists(Guid id)
-    {
-        using var context = DbFactory.CreateDbContext();
-        return context.Movies.Any(e => e.Id == id);
     }
 }
