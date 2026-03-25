@@ -3,7 +3,7 @@ namespace Abc.Tests.Aids
 {
     public abstract class BaseTests<TClass> : TestAids<TClass> where TClass : class, new()
     {
-        [TestInitialize] public void TestInitialize() => obj = new TClass();
+        [TestInitialize] public virtual void TestInitialize() => obj = new TClass();
         [TestMethod] public void CanCreateTest() => Assert.IsNotNull(obj);
         [TestMethod] public void IsClassCorrectTest()
         {

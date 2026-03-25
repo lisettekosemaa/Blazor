@@ -2,7 +2,7 @@
 
 namespace Abc.Tests.Aids;
 
-public abstract class TestAids<TClass> where TClass : class, new ()
+public abstract class TestAids<TClass> : TestAids where TClass : class, new ()
 {
     protected TClass obj;
     protected const BindingFlags PublicDeclared = BindingFlags.Public
@@ -25,4 +25,9 @@ public abstract class TestAids<TClass> where TClass : class, new ()
            $"type '{p.PropertyType.Name}' instead of '{typeof(T).Name}'.";
     private static string NoProperty(string name) 
         => $"Class '{typeof(TClass).Name}' does not have a public property named '{name}'.";
+}
+public class TestAids
+{
+    public void areEqual<T>(T expected, T actual) => Assert.AreEqual(expected, actual);
+    public void areSame(object expected, object actual) => Assert.AreSame(expected, actual);
 }
