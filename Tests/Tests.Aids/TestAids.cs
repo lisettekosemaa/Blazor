@@ -1,10 +1,13 @@
-﻿using System.Reflection;
+﻿using System.Formats.Asn1;
+using System.Reflection;
 
 namespace Abc.Tests.Aids;
 
 public abstract class TestAids<TClass> : TestAids where TClass : class, new ()
 {
     protected TClass obj;
+    [TestInitialize] public virtual void TestInitialize() => type = typeof(TClass);
+
     protected const BindingFlags PublicDeclared = BindingFlags.Public
                                                   | BindingFlags.Instance
                                                   | BindingFlags.DeclaredOnly
@@ -26,8 +29,14 @@ public abstract class TestAids<TClass> : TestAids where TClass : class, new ()
     private static string NoProperty(string name) 
         => $"Class '{typeof(TClass).Name}' does not have a public property named '{name}'.";
 }
-public class TestAids
+public abstract class TestAids
 {
+    protected Type type { get; set; }
+    [TestMethod] public void IsClassCorrectTest() {
+        var className = type?.Name;
+        var testClassName = GetType().Name;
+        Assert.AreEqual(testClassName.Replace("Tests", ""), className);
+    }
     public void areEqual<T>(T expected, T actual) => Assert.AreEqual(expected, actual);
     public void areSame(object expected, object actual) => Assert.AreSame(expected, actual);
 }
