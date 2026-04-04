@@ -16,7 +16,8 @@
         <EditForm method="post" Model="country" OnValidSubmit="AddCountry" FormName="create" Enhance>
             <DataAnnotationsValidator />
             <ValidationSummary class="text-danger" role="alert"/>
-            <MyPropertyEditor TValue="string" Id="name" Label="Name" @bind-Value="country.Name"/>
+            <MyEntityEditor Entity="country" />
+            @* <MyPropertyEditor TValue="string" Id="name" Label="Name" @bind-Value="country.Name"/>
             <MyPropertyEditor TValue="string" Id="code" Label="Code" @bind-Value="country.Code" />
             <MyPropertyEditor TValue="string" Id="details" Label="Details" @bind-Value="country.Details" />
             <MyPropertyEditor TValue="string" Id="isoCode" Label="ISO Code" @bind-Value="country.IsoCode" />
@@ -24,7 +25,7 @@
             <MyPropertyEditor TValue="string" Id="officialName" Label="Official Name" @bind-Value="country.OfficialName" />
             <MyPropertyEditor TValue="string" Id="nativeName" Label="Native Name" @bind-Value="country.NativeName" />
             <MyPropertyEditor TValue="DateTime?" Id="validFrom" Label="Valid From" @bind-Value="country.ValidFrom" />
-            <MyPropertyEditor TValue="DateTime?" Id="validTo" Label="Valid To" @bind-Value="country.ValidTo" />
+            <MyPropertyEditor TValue="DateTime?" Id="validTo" Label="Valid To" @bind-Value="country.ValidTo" /> *@
             <button type="submit" class="btn btn-primary">Create</button>
         </EditForm>
     </div>
