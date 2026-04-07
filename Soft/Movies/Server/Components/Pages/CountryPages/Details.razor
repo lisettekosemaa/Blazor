@@ -5,25 +5,12 @@
 @inject ICountriesRepo Repo
 @inject NavigationManager NavigationManager
 
-<PageTitle>Country Details</PageTitle>
-
-<h1>Details</h1>
-
-<div>
-    <h2>Country</h2>
-    <hr />
-    @if (country is null)
-    {
-        <p><em>Loading...</em></p>
-    }
-        else { 
-            <MyEntityViewer Entity="country" />
-        <div>
-            <a href="@($"/countries/edit?id={country.Id}")">Edit</a> |
-            <a href="@($"/countries")">Back to List</a>
-        </div>
-    }
-</div>
+<MyDetailsPage 
+    PageTitleText="Country Details" 
+    EntityTitle="Country" 
+    Entity="country" 
+    BasePath="/countries" 
+    EntityId="country?.Id" />
 
 @code {
     private Country country;

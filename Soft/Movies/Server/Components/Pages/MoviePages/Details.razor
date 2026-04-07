@@ -5,25 +5,12 @@
 @inject IMoviesRepo Repo
 @inject NavigationManager NavigationManager
 
-<PageTitle>Details</PageTitle>
-
-<h1>Details</h1>
-
-<div>
-    <h2>Movie</h2>
-    <hr />
-    @if (movie is null)
-    {
-        <p><em>Loading...</em></p>
-    }
-        else { 
-            <MyEntityViewer Entity="movie" />
-        <div>
-            <a href="@($"/movies/edit?id={movie.Id}")">Edit</a> |
-            <a href="@($"/movies")">Back to List</a>
-        </div>
-    }
-</div>
+<MyDetailsPage 
+    PageTitleText="Movie Details" 
+    EntityTitle="Movie" 
+    Entity="movie" 
+    BasePath="/movies" 
+    EntityId="movie?.Id" />
 
 @code {
     private Movie movie;
