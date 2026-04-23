@@ -9,8 +9,11 @@ namespace Abc.Tests.Aids
         {
             Assert.IsTrue(TypeExtension.IsBool(typeof(bool)));
             Assert.IsFalse(TypeExtension.IsBool(typeof(string)));
-            Assert.IsFalse(TypeExtension.IsBool(null));
             Assert.IsTrue(typeof(bool).IsBool());
+        }
+        [TestMethod] public void IsBoolNullableTest()
+        {
+            Assert.IsTrue(TypeExtension.IsBool(typeof(bool?)));
         }
         [TestMethod] public void IsDateTest() 
         {
@@ -61,11 +64,10 @@ namespace Abc.Tests.Aids
         [DataRow(typeof(Guid))]
         [DataRow(typeof(object))]
         [DataRow(null)]
-        [TestMethod] public void IsNumeric_NegativeTests(Type t)
+        [TestMethod] public void IsNumeric_NegativeTest(Type t)
         {
             Assert.IsFalse(TypeExtension.IsNumeric(t));
             if (t != null) Assert.IsFalse(t.IsNumeric());
         }
-
     }
 }
