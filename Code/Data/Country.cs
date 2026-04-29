@@ -7,6 +7,8 @@ public sealed class Country : NamedEntity
     public string NumericCode { get; set; } = "";
     public string OfficialName { get; set; } = "";
     public string NativeName { get; set; } = "";
-    public bool IsIsoCountry { get; set; }
+    bool IsIsoCountry { get; set; }
+    bool IsLoyaltyProgram { get; set; }
     public string IsoCode { get; set; } = "";
+    public IEnumerable<CountryCurrency> Currencies { get; set; } = [];
 }

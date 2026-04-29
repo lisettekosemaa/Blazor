@@ -12,7 +12,6 @@ namespace Abc.Tests.Data
         [TestMethod] public void NumericCodeTest() => IsProperty<string>(nameof(Country.NumericCode));
         [TestMethod] public void OfficialNameTest() => IsProperty<string>(nameof(Country.OfficialName));
         [TestMethod] public void NativeNameTest() => IsProperty<string>(nameof(Country.NativeName));
-        [TestMethod] public void IsIsoCountryTest() => IsProperty<bool>(nameof(Country.IsIsoCountry));
         [TestMethod] public void IsoCodeTest() => IsProperty<string>(nameof(Country.IsoCode));
     }
 }
