@@ -3,10 +3,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace Abc.Soft.Web.Migrations
+namespace Abc.Infra.Migrations
 {
     /// <inheritdoc />
-    public partial class v180326Movies : Migration
+    public partial class _290426 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -58,11 +58,9 @@ namespace Abc.Soft.Web.Migrations
                     NumericCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     OfficialName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     NativeName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    IsIsoCountry = table.Column<bool>(type: "bit", nullable: false),
                     IsoCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ValidFrom = table.Column<DateTime>(type: "datetime2", nullable: true),
                     ValidTo = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Timestamp = table.Column<byte[]>(type: "rowversion", rowVersion: true, nullable: true),
                     Details = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Code = table.Column<string>(type: "nvarchar(max)", nullable: true)
@@ -73,22 +71,24 @@ namespace Abc.Soft.Web.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Movies",
+                name: "Currencies",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    NumericCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    MajorUnitSymbol = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    MinorUnitSymbol = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    RatioOfMinorUnit = table.Column<double>(type: "float", nullable: false),
+                    IsIsoCurrency = table.Column<bool>(type: "bit", nullable: false),
                     ValidFrom = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Genre = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     ValidTo = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Timestamp = table.Column<byte[]>(type: "rowversion", rowVersion: true, nullable: true),
                     Details = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Code = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Movies", x => x.Id);
+                    table.PrimaryKey("PK_Currencies", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -216,6 +216,85 @@ namespace Abc.Soft.Web.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "CountryCurrencies",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CountryId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CurrencyId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ValidFrom = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    ValidTo = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Details = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CountryCurrencies", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_CountryCurrencies_Countries_CountryId",
+                        column: x => x.CountryId,
+                        principalTable: "Countries",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_CountryCurrencies_Currencies_CurrencyId",
+                        column: x => x.CurrencyId,
+                        principalTable: "Currencies",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Monies",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    CurrencyId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ValidFrom = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    ValidTo = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Monies", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Monies_Currencies_CurrencyId",
+                        column: x => x.CurrencyId,
+                        principalTable: "Currencies",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Movies",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ValidFrom = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Genre = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    MoneyId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    CountryId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    ValidTo = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Details = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Code = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Movies", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Movies_Countries_CountryId",
+                        column: x => x.CountryId,
+                        principalTable: "Countries",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Movies_Monies_MoneyId",
+                        column: x => x.MoneyId,
+                        principalTable: "Monies",
+                        principalColumn: "Id");
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -259,6 +338,31 @@ namespace Abc.Soft.Web.Migrations
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CountryCurrencies_CountryId",
+                table: "CountryCurrencies",
+                column: "CountryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CountryCurrencies_CurrencyId",
+                table: "CountryCurrencies",
+                column: "CurrencyId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Monies_CurrencyId",
+                table: "Monies",
+                column: "CurrencyId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Movies_CountryId",
+                table: "Movies",
+                column: "CountryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Movies_MoneyId",
+                table: "Movies",
+                column: "MoneyId");
         }
 
         /// <inheritdoc />
@@ -283,7 +387,7 @@ namespace Abc.Soft.Web.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Countries");
+                name: "CountryCurrencies");
 
             migrationBuilder.DropTable(
                 name: "Movies");
@@ -293,6 +397,15 @@ namespace Abc.Soft.Web.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "Countries");
+
+            migrationBuilder.DropTable(
+                name: "Monies");
+
+            migrationBuilder.DropTable(
+                name: "Currencies");
         }
     }
 }

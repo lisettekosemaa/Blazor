@@ -9,18 +9,18 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace Abc.Soft.Web.Migrations
+namespace Abc.Infra.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260318074113_v.18.03.26-Movies")]
-    partial class v180326Movies
+    [Migration("20260429085109_29.04.26")]
+    partial class _290426
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "10.0.2")
+                .HasAnnotation("ProductVersion", "10.0.7")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -37,9 +37,6 @@ namespace Abc.Soft.Web.Migrations
                     b.Property<string>("Details")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("IsIsoCountry")
-                        .HasColumnType("bit");
-
                     b.Property<string>("IsoCode")
                         .HasColumnType("nvarchar(max)");
 
@@ -55,11 +52,6 @@ namespace Abc.Soft.Web.Migrations
                     b.Property<string>("OfficialName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<byte[]>("Timestamp")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("rowversion");
-
                     b.Property<DateTime?>("ValidFrom")
                         .HasColumnType("datetime2");
 
@@ -71,7 +63,37 @@ namespace Abc.Soft.Web.Migrations
                     b.ToTable("Countries");
                 });
 
-            modelBuilder.Entity("Abc.Data.Movie", b =>
+            modelBuilder.Entity("Abc.Data.CountryCurrency", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CountryId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CurrencyId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Details")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("ValidFrom")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("ValidTo")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CountryId");
+
+                    b.HasIndex("CurrencyId");
+
+                    b.ToTable("CountryCurrencies");
+                });
+
+            modelBuilder.Entity("Abc.Data.Currency", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -83,19 +105,23 @@ namespace Abc.Soft.Web.Migrations
                     b.Property<string>("Details")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Genre")
+                    b.Property<bool>("IsIsoCurrency")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("MajorUnitSymbol")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MinorUnitSymbol")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18, 2)");
+                    b.Property<string>("NumericCode")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<byte[]>("Timestamp")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("rowversion");
+                    b.Property<double>("RatioOfMinorUnit")
+                        .HasColumnType("float");
 
                     b.Property<DateTime?>("ValidFrom")
                         .HasColumnType("datetime2");
@@ -105,10 +131,77 @@ namespace Abc.Soft.Web.Migrations
 
                     b.HasKey("Id");
 
+                    b.ToTable("Currencies");
+                });
+
+            modelBuilder.Entity("Abc.Data.Money", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.Property<Guid>("CurrencyId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("ValidFrom")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("ValidTo")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CurrencyId");
+
+                    b.ToTable("Monies");
+                });
+
+            modelBuilder.Entity("Abc.Data.Movie", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Code")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("CountryId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Details")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Genre")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("MoneyId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.Property<DateTime?>("ValidFrom")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("ValidTo")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CountryId");
+
+                    b.HasIndex("MoneyId");
+
                     b.ToTable("Movies");
                 });
 
-            modelBuilder.Entity("Abc.Soft.Web.Data.ApplicationUser", b =>
+            modelBuilder.Entity("Abc.Infra.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -328,6 +421,49 @@ namespace Abc.Soft.Web.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("Abc.Data.CountryCurrency", b =>
+                {
+                    b.HasOne("Abc.Data.Country", null)
+                        .WithMany("Currencies")
+                        .HasForeignKey("CountryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Abc.Data.Currency", "Currency")
+                        .WithMany()
+                        .HasForeignKey("CurrencyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Currency");
+                });
+
+            modelBuilder.Entity("Abc.Data.Money", b =>
+                {
+                    b.HasOne("Abc.Data.Currency", "Currency")
+                        .WithMany()
+                        .HasForeignKey("CurrencyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Currency");
+                });
+
+            modelBuilder.Entity("Abc.Data.Movie", b =>
+                {
+                    b.HasOne("Abc.Data.Country", "Country")
+                        .WithMany()
+                        .HasForeignKey("CountryId");
+
+                    b.HasOne("Abc.Data.Money", "Money")
+                        .WithMany()
+                        .HasForeignKey("MoneyId");
+
+                    b.Navigation("Country");
+
+                    b.Navigation("Money");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -339,7 +475,7 @@ namespace Abc.Soft.Web.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("Abc.Soft.Web.Data.ApplicationUser", null)
+                    b.HasOne("Abc.Infra.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -348,7 +484,7 @@ namespace Abc.Soft.Web.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("Abc.Soft.Web.Data.ApplicationUser", null)
+                    b.HasOne("Abc.Infra.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -357,7 +493,7 @@ namespace Abc.Soft.Web.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserPasskey<string>", b =>
                 {
-                    b.HasOne("Abc.Soft.Web.Data.ApplicationUser", null)
+                    b.HasOne("Abc.Infra.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -414,7 +550,7 @@ namespace Abc.Soft.Web.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Abc.Soft.Web.Data.ApplicationUser", null)
+                    b.HasOne("Abc.Infra.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -423,11 +559,16 @@ namespace Abc.Soft.Web.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("Abc.Soft.Web.Data.ApplicationUser", null)
+                    b.HasOne("Abc.Infra.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Abc.Data.Country", b =>
+                {
+                    b.Navigation("Currencies");
                 });
 #pragma warning restore 612, 618
         }

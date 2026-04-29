@@ -14,4 +14,12 @@ namespace Abc.Infra
         : EfBaseRepo<ApplicationDbContext, Currency>(c), ICurrenciesRepo
     {
     }
+    public class MoniesRepo(ApplicationDbContext c = null)
+        : EfBaseRepo<ApplicationDbContext, Money>(c), IMoniesRepo
+    {
+    }
+    public class CountryCurrenciesRepo(ApplicationDbContext c = null)
+        : EfBaseRepo<ApplicationDbContext, CountryCurrency>(c), ICountryCurrenciesRepo
+    {
+    }
 }
