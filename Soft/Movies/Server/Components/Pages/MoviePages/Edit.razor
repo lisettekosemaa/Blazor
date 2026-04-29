@@ -1,42 +1,15 @@
 ﻿@page "/movies/edit"
-@using Abc.Data
-@using Abc.Infra
 @attribute [ExcludeFromInteractiveRouting]
 @inject IMoviesRepo Repo
 @inject NavigationManager NavigationManager
 
-<PageTitle>Edit</PageTitle>
-
-<h1>Edit</h1>
-
-<h2>Movie</h2>
-
-@if (movie is null)
-{
-    <p><em>Loading...</em></p>
-}
-else
-{
-    <div class="row">
-        <div class="col-md-4">
-            <EditForm method="post" Model="movie" OnValidSubmit="UpdateMovie" FormName="edit" Enhance>
-                <DataAnnotationsValidator />
-                <ValidationSummary role="alert"/>
-                <input type="hidden" name="Movie.Id" value="@movie.Id" />
-                <MyEntityEditor Entity="movie" />
-               @*  <MyPropertyEditor TValue="string" Id="title" Label="Title:" @bind-Value="movie.Name" />
-                <MyPropertyEditor TValue="DateTime?" Id="releasedate" Label="ReleaseDate:" @bind-Value="movie.ValidFrom" />
-                <MyPropertyEditor TValue="string" Id="genre" Label="Genre:" @bind-Value="movie.Genre" />
-                <MyPropertyEditor TValue="decimal" Id="price" Label="Price:" @bind-Value="movie.Price" /> *@
-                <button type="submit" class="btn btn-primary">Save</button>
-            </EditForm>
-        </div>
-    </div>
-}
-
-<div>
-    <a href="/movies">Back to List</a>
-</div>
+<MyEditPage 
+    PageTitleText="Edit Movie"
+    EntityTitle="movie?.Title"
+    Entity="movie"
+    BasePath="/movies"
+    OnValidSubmit="UpdateMovie"
+    EntityId="Id" />
 
 @code {
     [SupplyParameterFromQuery] private Guid Id { get; set; }

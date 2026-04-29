@@ -1,6 +1,4 @@
 ﻿@page "/countries/details"
-@using Abc.Data
-@using Abc.Infra
 @attribute [ExcludeFromInteractiveRouting]
 @inject ICountriesRepo Repo
 @inject NavigationManager NavigationManager
@@ -10,7 +8,7 @@
     EntityTitle="Country" 
     Entity="country" 
     BasePath="/countries" 
-    EntityId="country?.Id" />
+    EntityId="Id" />
 
 @code {
     private Country country;
