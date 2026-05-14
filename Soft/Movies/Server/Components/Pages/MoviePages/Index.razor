@@ -1,48 +1,28 @@
 ﻿@page "/movies"
 @rendermode InteractiveServer
-@using Abc.Data
-@using Abc.Infra
 @using System.Linq
 @attribute [ExcludeFromInteractiveRouting]
 @using Microsoft.AspNetCore.Components.QuickGrid
 @inject IMoviesRepo Repo
 
-<PageTitle>Index</PageTitle>
-
-<h1>Index</h1>
-
-<input type="search" @bind="titleFilter" @bind:event="oninput" />
-
-<p>
-    <a href="movies/create">Create New</a>
-</p>
-
-<div>
-<QuickGrid Class="table" Items="FilteredMovies" Pagination="pagination">
-    <PropertyColumn Property="movie => movie.Name" Sortable="true" />
-    <PropertyColumn Property="movie => movie.ValidFrom" Title="Release Date" />
-    <PropertyColumn Property="movie => movie.Genre" />
-    <PropertyColumn Property="movie => movie.Price" />
-
-    <TemplateColumn Context="movie">
-        <a href="@($"movies/edit?id={movie.Id}")">Edit</a> |
-        <a href="@($"movies/details?id={movie.Id}")">Details</a> |
-        <a href="@($"movies/delete?id={movie.Id}")">Delete</a>
-    </TemplateColumn>
-</QuickGrid>
-</div>
+<MyIndexPage TItem="Movie"
+             PageTitleText="Movies"
+             EntityTitle="Movies"
+             Items="movies"
+             BasePath="movies">
+</MyIndexPage>
 
 <Paginator State="pagination" />
 
 @code {
-    private IQueryable<Movie> Movies = Enumerable.Empty<Movie>().AsQueryable();
+    private IQueryable<Movie> movies = Enumerable.Empty<Movie>().AsQueryable();
     protected override async Task OnInitializedAsync()
     {
         if (Repo is null) return;
-        Movies = (await Repo.GetAsync()).AsQueryable();
+        movies = (await Repo.GetAsync()).AsQueryable();
     }
     private string titleFilter = string.Empty;
     private IQueryable<Movie> FilteredMovies => 
-        Movies.Where(m => m.Name!.Contains(titleFilter));
+        movies.Where(m => m.Name!.Contains(titleFilter));
     private PaginationState pagination = new PaginationState { ItemsPerPage = 5 };
 }
