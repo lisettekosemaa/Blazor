@@ -1,0 +1,21 @@
+﻿@page "/currencies/details"
+@attribute [ExcludeFromInteractiveRouting]
+@inject ICurrenciesRepo Repo
+@inject NavigationManager NavigationManager
+
+<MyDetailsPage 
+    PageTitleText="Currency Details" 
+    EntityTitle="Currency" 
+    Entity="currency" 
+    BasePath="/currencies" 
+    EntityId="Id" />
+
+@code {
+    private Currency currency;
+    [SupplyParameterFromQuery] private Guid Id { get; set; }
+    protected override async Task OnInitializedAsync()
+    {
+        currency = await Repo.GetAsync(Id);
+        if (currency is null) NavigationManager.NotFound();
+    }
+}

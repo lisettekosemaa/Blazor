@@ -1,0 +1,21 @@
+﻿@page "/monies/details"
+@attribute [ExcludeFromInteractiveRouting]
+@inject IMoniesRepo Repo
+@inject NavigationManager NavigationManager
+
+<MyDetailsPage 
+    PageTitleText="Money Details" 
+    EntityTitle="Money" 
+    Entity="money" 
+    BasePath="/monies" 
+    EntityId="Id"/>
+
+@code {
+    private Money money;
+    [SupplyParameterFromQuery] private Guid Id { get; set; }
+    protected override async Task OnInitializedAsync()
+    {
+        money = await Repo.GetAsync(Id);
+        if (money is null) NavigationManager.NotFound();
+    }
+}

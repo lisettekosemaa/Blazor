@@ -1,0 +1,20 @@
+﻿@page "/monies/create"
+@attribute [ExcludeFromInteractiveRouting]
+@inject IMoniesRepo Repo
+@inject NavigationManager NavigationManager
+
+<MyCreatePage PageTitleText="Create Money"
+              EntityTitle="Money"
+              Entity="money"
+              BasePath="/monies"
+              OnValidSubmit="AddMoney" />
+
+@code {
+    [SupplyParameterFromForm] private Money money { get; set; } = default!;
+    protected override void OnInitialized() => money ??= new();
+    private async Task AddMoney()
+    {
+        await Repo.CreateAsync(money);
+        NavigationManager.NavigateTo("/monies");
+    }
+}

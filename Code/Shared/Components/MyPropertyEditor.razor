@@ -1,14 +1,16 @@
-﻿<div class="mb-3">
-    @if (hasProperty)
-    {
-        <label for="@PropertyName" class="form-label">@inputLabel</label>
-        @if (hasEditor)
-        {
+﻿<dl class="row">
+    @if (hasProperty) {
+        <dt class="col-sm-2">
+            <label for="@PropertyName" class="form-label">@inputLabel</label>
+        </dt>
+        <dd class="col-sm-10">
+            @if (hasEditor) {
             <DynamicComponent Type="@editorType" Parameters="@editorParams" />
             <DynamicComponent Type="@validationType" Parameters="@validationParams" />
-        }
+            }
+        </dd>
     }
-</div>
+</dl>
 
 @code {
     [Parameter] public object Item { get; set; }

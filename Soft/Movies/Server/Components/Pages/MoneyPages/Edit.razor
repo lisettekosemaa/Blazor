@@ -1,0 +1,28 @@
+﻿@page "/monies/edit"
+@attribute [ExcludeFromInteractiveRouting]
+@inject IMoniesRepo Repo
+@inject NavigationManager NavigationManager
+
+<MyEditPage 
+    PageTitleText="Edit Money"
+    EntityTitle="Money"
+    Entity="money"
+    BasePath="/monies"
+    OnValidSubmit="UpdateMoney"
+    EntityId="money?.Id" />
+
+@code {
+    [SupplyParameterFromQuery] private Guid Id { get; set; }
+    [SupplyParameterFromForm] private Money money { get; set; }
+    protected override async Task OnInitializedAsync()
+    {
+        money ??= await Repo.GetAsync(Id);
+        if (money is null) NavigationManager.NotFound();
+    }
+
+    private async Task UpdateMoney()
+    {
+        await Repo.UpdateAsync(money!);
+        NavigationManager.NavigateTo("/monies");
+    }
+}
