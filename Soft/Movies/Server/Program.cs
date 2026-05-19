@@ -57,6 +57,8 @@ builder.Services.AddScoped<ICountryCurrenciesRepo, CountryCurrenciesRepo>();
 
 var app = builder.Build();
 
+//decimaliga mingi probleem? Money ja Movie lehtedega? decimal?
+
 //using var scope = app.Services.CreateScope();
 //var sp = scope.ServiceProvider;
 //var db = sp.GetRequiredService<ApplicationDbContext>();

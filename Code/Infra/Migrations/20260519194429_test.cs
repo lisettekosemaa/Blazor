@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Abc.Infra.Migrations
 {
     /// <inheritdoc />
-    public partial class _290426 : Migration
+    public partial class test : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -221,8 +221,8 @@ namespace Abc.Infra.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CountryId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CurrencyId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CountryId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    CurrencyId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     ValidFrom = table.Column<DateTime>(type: "datetime2", nullable: true),
                     ValidTo = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Details = table.Column<string>(type: "nvarchar(max)", nullable: true)
@@ -234,14 +234,12 @@ namespace Abc.Infra.Migrations
                         name: "FK_CountryCurrencies_Countries_CountryId",
                         column: x => x.CountryId,
                         principalTable: "Countries",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_CountryCurrencies_Currencies_CurrencyId",
                         column: x => x.CurrencyId,
                         principalTable: "Currencies",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -250,7 +248,7 @@ namespace Abc.Infra.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    CurrencyId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CurrencyId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     ValidFrom = table.Column<DateTime>(type: "datetime2", nullable: true),
                     ValidTo = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
@@ -261,8 +259,7 @@ namespace Abc.Infra.Migrations
                         name: "FK_Monies_Currencies_CurrencyId",
                         column: x => x.CurrencyId,
                         principalTable: "Currencies",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(

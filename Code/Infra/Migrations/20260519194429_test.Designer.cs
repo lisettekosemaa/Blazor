@@ -12,15 +12,15 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Abc.Infra.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260429085109_29.04.26")]
-    partial class _290426
+    [Migration("20260519194429_test")]
+    partial class test
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "10.0.7")
+                .HasAnnotation("ProductVersion", "10.0.8")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -69,10 +69,10 @@ namespace Abc.Infra.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("CountryId")
+                    b.Property<Guid?>("CountryId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("CurrencyId")
+                    b.Property<Guid?>("CurrencyId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Details")
@@ -143,7 +143,7 @@ namespace Abc.Infra.Migrations
                     b.Property<decimal>("Amount")
                         .HasColumnType("decimal(18, 2)");
 
-                    b.Property<Guid>("CurrencyId")
+                    b.Property<Guid?>("CurrencyId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime?>("ValidFrom")
@@ -425,15 +425,11 @@ namespace Abc.Infra.Migrations
                 {
                     b.HasOne("Abc.Data.Country", null)
                         .WithMany("Currencies")
-                        .HasForeignKey("CountryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CountryId");
 
                     b.HasOne("Abc.Data.Currency", "Currency")
                         .WithMany()
-                        .HasForeignKey("CurrencyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CurrencyId");
 
                     b.Navigation("Currency");
                 });
@@ -442,9 +438,7 @@ namespace Abc.Infra.Migrations
                 {
                     b.HasOne("Abc.Data.Currency", "Currency")
                         .WithMany()
-                        .HasForeignKey("CurrencyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CurrencyId");
 
                     b.Navigation("Currency");
                 });
