@@ -8,16 +8,9 @@
     TItem="CountryCurrency"
     PageTitleText="Country Currencies Page"
     EntityTitle="Country Currencies"
-    Items="countryCurrencies"
+    Repo="Repo"
     BasePath="/countrycurrencies">
 </MyIndexPage>
 
 @code {
-    private IQueryable<CountryCurrency> countryCurrencies = Enumerable.Empty<CountryCurrency>().AsQueryable();
-
-    protected override async Task OnInitializedAsync()
-    {
-        if (Repo is null) return;
-        countryCurrencies = (await Repo.GetAsync()).AsQueryable();
-    }
 }

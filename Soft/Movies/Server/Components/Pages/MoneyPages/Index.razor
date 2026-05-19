@@ -1,6 +1,5 @@
 ﻿@page "/monies"
 @rendermode InteractiveServer
-@using System.Linq
 @attribute [ExcludeFromInteractiveRouting]
 @inject IMoniesRepo Repo
 
@@ -8,16 +7,9 @@
     TItem="Money"
     PageTitleText="Monies Index"
     EntityTitle="Monies"
-    Items="monies"
+    Repo="Repo"
     BasePath="/monies">
 </MyIndexPage>
 
 @code {
-    private IQueryable<Money> monies = Enumerable.Empty<Money>().AsQueryable();
-
-    protected override async Task OnInitializedAsync()
-    {
-        if (Repo is null) return;
-        monies = (await Repo.GetAsync()).AsQueryable();
-    }
 }
