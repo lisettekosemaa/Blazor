@@ -56,16 +56,16 @@ namespace Abc.Aids
         public static float Float(float min = float.MinValue, float max = float.MaxValue)
             => (float)Double(min, max);
 
-        public static string String(byte minLength = byte.MinValue, byte maxLength = (byte)sbyte.MaxValue)
+        public static string String(byte minLen = byte.MinValue, byte maxLen = (byte)sbyte.MaxValue, string chars = null)
         {
-            var length = UInt8(minLength, maxLength);
-            var s = new char[length];
-            for (var i = 0; i < length; i++)
-                s[i] = Char('a', 'z');
+            var len = UInt8(minLen, maxLen);
+            var s = new char[len];
+            for (var i = 0; i < len; i++) s[i] = (chars is null) ? Char('a', 'z')
+                : chars[UInt8(0, (byte)chars.Length)];
             return new string(s);
         }
 
-        public static char Char(char min, char max)
+        public static char Char(char min = char.MinValue, char max = char.MaxValue)
             => (char)UInt16(min, max);
 
         public static bool Bool() => r.Next(2) == 0;
@@ -104,31 +104,35 @@ namespace Abc.Aids
                 if (!p.CanWrite) continue;
                 if (p.PropertyType.IsArray) continue;
                 if (exclude.Contains(p.Name)) continue;
-                var v = isClass(p) ? Object(p.PropertyType) : Value(p.PropertyType);
+                var randomAttribute = p.GetCustomAttribute<RandomAttribute>();
+                var v = randomAttribute is not null
+                    ? randomAttribute.CreateValue(p.PropertyType)
+                    : isClass(p) ? Object(p.PropertyType) : Value(p.PropertyType);
                 p.SetValue(o, v);
             }
             return o;
         }
         private static bool isClass(PropertyInfo p)
             => p.PropertyType.IsClass && p.PropertyType != typeof(string);
-        private static object Value(Type t) {
+        public static object Value(Type t)
+        {
             var x = Nullable.GetUnderlyingType(t);
             if (x is not null) t = x;
-            if (t == typeof(int)) return Int32();
-            if (t == typeof(long)) return Int64();
+            if (t == typeof(string)) return String();
+            if (t == typeof(char)) return Char();
+            if (t == typeof(bool)) return Bool();
+            if (t == typeof(DateTime)) return DateTime();
+            if (t == typeof(decimal)) return Decimal();
             if (t == typeof(double)) return Double();
-            if (t == typeof(sbyte)) return Int8();
-            if (t == typeof(short)) return Int16();
+            if (t == typeof(float)) return Float();
             if (t == typeof(byte)) return UInt8();
             if (t == typeof(ushort)) return UInt16();
             if (t == typeof(uint)) return UInt32();
             if (t == typeof(ulong)) return UInt64();
-            if (t == typeof(decimal)) return Decimal();
-            if (t == typeof(float)) return Float();
-            if (t == typeof(string)) return String();
-            if (t == typeof(char)) return Char('a', 'z');
-            if (t == typeof(bool)) return Bool();
-            if (t == typeof(DateTime)) return DateTime();
+            if (t == typeof(sbyte)) return Int8();
+            if (t == typeof(short)) return Int16();
+            if (t == typeof(int)) return Int32();
+            if (t == typeof(long)) return Int64();
             if (t == typeof(TimeSpan)) return TimeSpan();
             if (t == typeof(Guid)) return Guid();
             throw new NotSupportedException($"Type {t} is not supported.");

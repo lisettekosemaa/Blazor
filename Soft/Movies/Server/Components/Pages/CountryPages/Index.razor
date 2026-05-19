@@ -4,12 +4,11 @@
 @attribute [ExcludeFromInteractiveRouting]
 @inject ICountriesRepo Repo
 
-<MyIndexPage
-    TItem="Country"
-    PageTitleText="Countries Page"
-    EntityTitle="Countries"
-    Items="countries"
-    BasePath="/countries">
+<MyIndexPage TItem="Country"
+             PageTitleText="Countries Page"
+             EntityTitle="Countries"
+             Items="countries"
+             BasePath="/countries">
 </MyIndexPage>
 
 @code {

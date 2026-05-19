@@ -57,10 +57,10 @@ builder.Services.AddScoped<ICountryCurrenciesRepo, CountryCurrenciesRepo>();
 
 var app = builder.Build();
 
-using var scope = app.Services.CreateScope();
-var sp = scope.ServiceProvider;
-var db = sp.GetRequiredService<ApplicationDbContext>();
-await new SeedDb(db, 20).Seed();
+//using var scope = app.Services.CreateScope();
+//var sp = scope.ServiceProvider;
+//var db = sp.GetRequiredService<ApplicationDbContext>();
+//await new SeedDb(db, 20).Seed();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
