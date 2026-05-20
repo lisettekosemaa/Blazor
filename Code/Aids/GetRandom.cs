@@ -50,32 +50,17 @@ namespace Abc.Aids
             return (ulong)(Int64(minLong, maxLong) + long.MaxValue);
         }
 
-        public static decimal Decimal(decimal min = decimal.MinValue, decimal max = decimal.MaxValue)
-            => (decimal)Double((double)min, (double)max);
-
         public static float Float(float min = float.MinValue, float max = float.MaxValue)
             => (float)Double(min, max);
 
-        public static string String(byte minLen = byte.MinValue, byte maxLen = (byte)sbyte.MaxValue, string chars = null)
+        public static decimal Decimal(decimal min = decimal.MinValue, decimal max = decimal.MaxValue)
+            => (decimal)Double((double)min, (double)max);
+
+        public static Guid Guid()
         {
-            var len = UInt8(minLen, maxLen);
-            var s = new char[len];
-            for (var i = 0; i < len; i++) s[i] = (chars is null) ? Char('a', 'z')
-                : chars[UInt8(0, (byte)chars.Length)];
-            return new string(s);
-        }
-
-        public static char Char(char min = char.MinValue, char max = char.MaxValue)
-            => (char)UInt16(min, max);
-
-        public static bool Bool() => r.Next(2) == 0;
-
-        public static DateTime DateTime(DateTime? min = null, DateTime? max = null)
-        {
-            var minTicks = min?.Ticks ?? System.DateTime.MinValue.Ticks;
-            var maxTicks = max?.Ticks ?? System.DateTime.MaxValue.Ticks;
-            var ticks = Int64(minTicks, maxTicks);
-            return new DateTime(ticks);
+            Span<byte> buffer = stackalloc byte[16];
+            r.NextBytes(buffer);
+            return new Guid(buffer);
         }
 
         public static TimeSpan TimeSpan(TimeSpan? min = null, TimeSpan? max = null)
@@ -86,11 +71,29 @@ namespace Abc.Aids
             return new TimeSpan(ticks);
         }
 
-        public static Guid Guid()
+        public static DateTime DateTime(DateTime? min = null, DateTime? max = null)
         {
-            Span<byte> buffer = stackalloc byte[16];
-            r.NextBytes(buffer);
-            return new Guid(buffer);
+            var minTicks = min?.Ticks ?? System.DateTime.MinValue.Ticks;
+            var maxTicks = max?.Ticks ?? System.DateTime.MaxValue.Ticks;
+            var ticks = Int64(minTicks, maxTicks);
+            return new DateTime(ticks);
+        }
+
+        public static bool Bool() => r.Next(2) == 0;
+
+        public static char Char(char min = char.MinValue, char max = char.MaxValue)
+            => (char)UInt16(min, max);
+
+        public static string String(byte minLen = byte.MinValue, byte maxLen = (byte)sbyte.MaxValue,
+            string chars = null)
+        {
+            var len = UInt8(minLen, maxLen);
+            var s = new char[len];
+            for (var i = 0; i < len; i++)
+                s[i] = (chars is null)
+                    ? Char('a', 'z')
+                    : chars[UInt8(0, (byte)chars.Length)];
+            return new string(s);
         }
 
         public static object Object(Type t, string[] exclude = null)
@@ -107,13 +110,18 @@ namespace Abc.Aids
                 var randomAttribute = p.GetCustomAttribute<RandomAttribute>();
                 var v = randomAttribute is not null
                     ? randomAttribute.CreateValue(p.PropertyType)
-                    : isClass(p) ? Object(p.PropertyType) : Value(p.PropertyType);
+                    : isClass(p)
+                        ? Object(p.PropertyType)
+                        : Value(p.PropertyType);
                 p.SetValue(o, v);
             }
+
             return o;
         }
+
         private static bool isClass(PropertyInfo p)
             => p.PropertyType.IsClass && p.PropertyType != typeof(string);
+
         public static object Value(Type t)
         {
             var x = Nullable.GetUnderlyingType(t);

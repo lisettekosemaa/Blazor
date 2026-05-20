@@ -8,8 +8,13 @@
     @foreach (var p in typeof(TEntity).GetProperties())
     {
         @if (!show(p)) continue;
-        <TemplateColumn Title="@p.Name" Context="y">
-            @(value(p, y))
+        <TemplateColumn>
+            <HeaderTemplate>
+                <a href="@headerHref(p.Name)">@p.Name</a>
+            </HeaderTemplate>
+            <ChildContent Context="y">
+                @(value(p, y))
+            </ChildContent>
         </TemplateColumn>
     }
     <TemplateColumn Context="y">
@@ -53,6 +58,8 @@
         if (t.IsClass) return false;
         return true;
     }
+    private string headerHref(string columnName) => 
+        $"{BasePath}?SortBy={columnName}&Page=1&PageSize={query?.PageSize ?? 7}";
 }
 
 <style>

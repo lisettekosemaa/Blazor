@@ -1,4 +1,6 @@
-﻿using Abc.Data.Common;
+﻿using System.Linq.Expressions;
+using System.Reflection;
+using Abc.Data.Common;
 using Microsoft.EntityFrameworkCore;
 
 namespace Abc.Infra;
@@ -36,7 +38,26 @@ public class EfBaseRepo<TContext, TEntity>(TContext c) : IRepo<TEntity>
     {
         var s = (q.Page - 1) * q.PageSize;
         var t = q.PageSize;
-        var r = db.Set<TEntity>().Skip(s).Take(t).OrderBy(x => x.ValidFrom).AsNoTracking();
+        var dir = q.DirSort;
+        var n = q.SortBy;
+        var key = (n is null) ? null : sortBy(n);
+        var r = key == null 
+            ? db.Set<TEntity>().Skip(s).Take(t).AsNoTracking()
+            : dir == "desc"
+                ? db.Set<TEntity>().Skip(s).Take(t).OrderByDescending(key).AsNoTracking()
+                : db.Set<TEntity>().Skip(s).Take(t).OrderBy(key).AsNoTracking();
         return await r.ToListAsync();
+    }
+    private static readonly BindingFlags flags 
+        = BindingFlags.Instance | BindingFlags.Public | BindingFlags.IgnoreCase;
+
+    private static Expression<Func<TEntity, object>> sortBy(string propName)
+    {
+        var p = typeof(TEntity).GetProperty(propName, flags);
+        if (p == null) return null;
+        var parameter = Expression.Parameter(typeof(TEntity), "x");
+        var member = Expression.Property(parameter, p);
+        var converted = Expression.Convert(member, typeof(object));
+        return Expression.Lambda<Func<TEntity, object>>(converted, parameter);
     }
 }
