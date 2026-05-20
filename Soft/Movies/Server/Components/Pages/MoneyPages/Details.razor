@@ -1,13 +1,13 @@
-﻿@page "/monies/details"
+﻿@page "/money/details"
 @attribute [ExcludeFromInteractiveRouting]
-@inject IMoniesRepo Repo
+@inject IMoneyRepo Repo
 @inject NavigationManager NavigationManager
 
 <MyDetailsPage 
     PageTitleText="Money Details" 
     EntityTitle="Money" 
     Entity="money" 
-    BasePath="/monies" 
+    BasePath="/money" 
     EntityId="Id"/>
 
 @code {

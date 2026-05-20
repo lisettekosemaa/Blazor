@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Abc.Infra.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260519194429_test")]
-    partial class test
+    [Migration("20260520150711_money")]
+    partial class money
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -156,7 +156,7 @@ namespace Abc.Infra.Migrations
 
                     b.HasIndex("CurrencyId");
 
-                    b.ToTable("Monies");
+                    b.ToTable("Money");
                 });
 
             modelBuilder.Entity("Abc.Data.Movie", b =>

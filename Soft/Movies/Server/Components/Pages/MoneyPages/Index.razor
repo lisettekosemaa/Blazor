@@ -1,14 +1,14 @@
-﻿@page "/monies"
+﻿@page "/money"
 @rendermode InteractiveServer
 @attribute [ExcludeFromInteractiveRouting]
-@inject IMoniesRepo Repo
+@inject IMoneyRepo Repo
 
 <MyIndexPage
     TItem="Money"
-    PageTitleText="Monies Index"
-    EntityTitle="Monies"
+    PageTitleText="Money Index"
+    EntityTitle="Money"
     Repo="Repo"
-    BasePath="/monies">
+    BasePath="/money">
 </MyIndexPage>
 
 @code {

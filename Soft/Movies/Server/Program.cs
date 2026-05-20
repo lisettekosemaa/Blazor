@@ -52,17 +52,17 @@ builder.Services.AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSe
 builder.Services.AddScoped<IMoviesRepo, MoviesRepo>();
 builder.Services.AddScoped<ICountriesRepo, CountriesRepo>();
 builder.Services.AddScoped<ICurrenciesRepo, CurrenciesRepo>();
-builder.Services.AddScoped<IMoniesRepo, MoniesRepo>();
+builder.Services.AddScoped<IMoneyRepo, MoneyRepo>();
 builder.Services.AddScoped<ICountryCurrenciesRepo, CountryCurrenciesRepo>();
 
 var app = builder.Build();
 
-//decimaliga mingi probleem? Money ja Movie lehtedega? decimal?
+//decimaliga mingi probleem? Money ja Movie lehtedega ei toimi
 
 //using var scope = app.Services.CreateScope();
 //var sp = scope.ServiceProvider;
 //var db = sp.GetRequiredService<ApplicationDbContext>();
-//await new SeedDb(db, 20).Seed();
+//await new SeedDb(db, 150).Seed();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

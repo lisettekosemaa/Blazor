@@ -17,7 +17,7 @@ namespace Abc.Infra
             await seedTable(db.Currencies
                 /*[nameof(Country.TimeStamp)]*/);
 
-            await seedTable(db.Monies, [
+            await seedTable(db.Money, [
                 nameof(Money.CurrencyId),
                 nameof(Money.Currency)
                 /*,nameof(Country.TimeStamp)*/]);
@@ -42,6 +42,10 @@ namespace Abc.Infra
            {
                var item = (T)GetRandom.Object(typeof(T), exclude);
                items.Add(item);
+               if (items.Count % 100 != 0) continue;
+               await set.AddRangeAsync(items);
+               await db.SaveChangesAsync();
+               items = [];
            }
            await set.AddRangeAsync(items);
            await db.SaveChangesAsync();

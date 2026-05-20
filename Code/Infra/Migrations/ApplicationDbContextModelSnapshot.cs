@@ -153,7 +153,7 @@ namespace Abc.Infra.Migrations
 
                     b.HasIndex("CurrencyId");
 
-                    b.ToTable("Monies");
+                    b.ToTable("Money");
                 });
 
             modelBuilder.Entity("Abc.Data.Movie", b =>
