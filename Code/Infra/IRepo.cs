@@ -7,6 +7,7 @@ namespace Abc.Infra
     {
         Task<TEntity> GetAsync(Guid id);
         Task<IEnumerable<TEntity>> GetAsync();
+        Task<int> CountAsync();
         Task<TEntity> CreateAsync(TEntity e);
         Task<TEntity> UpdateAsync(TEntity e);
         Task DeleteAsync(Guid id);
