@@ -8,47 +8,49 @@
     @foreach (var p in typeof(TEntity).GetProperties())
     {
         @if (!show(p)) continue;
-        <TemplateColumn Title="@p.Name" Context="x">
-            @(value(p,x))
+        <TemplateColumn Title="@p.Name" Context="y">
+            @(value(p, y))
         </TemplateColumn>
     }
-
-    <TemplateColumn Context="x">
-        <a href="@($"{BasePath}/edit?id={x.Id}")">Edit</a> |
-        <a href="@($"{BasePath}/details?id={x.Id}")">Details</a> |
-        <a href="@($"{BasePath}/delete?id={x.Id}")">Delete</a>
+    <TemplateColumn Context="y">
+        <a href="@($"{BasePath}/edit?id={y.Id}")">Edit</a> |
+        <a href="@($"{BasePath}/details?id={y.Id}")">Details</a> |
+        <a href="@($"{BasePath}/delete?id={y.Id}")">Delete</a>
     </TemplateColumn>
 </QuickGrid>
 
-<MyTablePageNav TotalCount="@TotalCount" CurrentUri="@Nav.Uri" Page="2" PageSize="5"></MyTablePageNav>
+<MyTablePageNav Query="@query" TotalCount="@totalCount" CurrentUri="@nav.Uri" />
+
 
 @code {
     private IQueryable<TEntity> Entities { get; set; }
     [Parameter] public IRepo<TEntity> Repo { get; set; }
     [Parameter] public string BasePath { get; set; }
-    [Inject] private NavigationManager Nav { get; set; }
-    private int TotalCount { get; set; }
+    [Inject] private NavigationManager nav { get; set; }
+    private int totalCount;
+    private Query query;
 
-    protected override async Task OnInitializedAsync() {
+    protected override async Task OnInitializedAsync()
+    {
         if (Repo is null) return;
-        var uri = Nav.ToAbsoluteUri(Nav.Uri);
-        var query = new UrlParams(uri).Parse();
-        TotalCount = await Repo.CountAsync();
-        Entities = (await Repo.GetAsync()).AsQueryable();
+        var uri = nav.ToAbsoluteUri(nav.Uri);
+        query = new UrlParams(uri).Parse();
+        totalCount = await Repo.CountAsync(query);
+        Entities = (await Repo.GetAsync(query)).AsQueryable();
     }
-
-    private string value(PropertyInfo p, TEntity e) {
+    private string value(PropertyInfo p, TEntity e)
+    {
         var v = p?.GetValue(e);
         return v?.ToString() ?? string.Empty;
     }
-
-    private bool show(PropertyInfo p) {
+    private bool show(PropertyInfo p)
+    {
         if (p is null) return false;
         if (p.Name == nameof(NamedEntity.Id)) return false;
         var t = p.PropertyType;
         if (t == typeof(string)) return true;
         if (typeof(IEnumerable).IsAssignableFrom(t)) return false;
-        if (t.IsClass && t != typeof(string)) return false;
+        if (t.IsClass) return false;
         return true;
     }
 }
