@@ -1,4 +1,5 @@
 ﻿@using Abc.Data.Common
+@using Abc.Shared.Code
 @using Microsoft.AspNetCore.Components.QuickGrid
 
 @typeparam TEntity where TEntity : BaseEntity
@@ -19,7 +20,7 @@
     </TemplateColumn>
 </QuickGrid>
 
-<MyTablePageNav TotalCount="@TotalCount" CurrentUri="@Nav.Uri" Page="2" PageSize="6"></MyTablePageNav>
+<MyTablePageNav TotalCount="@TotalCount" CurrentUri="@Nav.Uri" Page="2" PageSize="5"></MyTablePageNav>
 
 @code {
     private IQueryable<TEntity> Entities { get; set; }
@@ -30,17 +31,18 @@
 
     protected override async Task OnInitializedAsync() {
         if (Repo is null) return;
+        var uri = Nav.ToAbsoluteUri(Nav.Uri);
+        var query = new UrlParams(uri).Parse();
         TotalCount = await Repo.CountAsync();
         Entities = (await Repo.GetAsync()).AsQueryable();
     }
 
-    private string value(PropertyInfo p, TEntity e)
-    {
+    private string value(PropertyInfo p, TEntity e) {
         var v = p?.GetValue(e);
         return v?.ToString() ?? string.Empty;
     }
-    private bool show(PropertyInfo p)
-    {
+
+    private bool show(PropertyInfo p) {
         if (p is null) return false;
         if (p.Name == nameof(NamedEntity.Id)) return false;
         var t = p.PropertyType;
@@ -58,9 +60,9 @@
         max-width: 100%;
     }
 
-        .myTable td {
-            white-space: normal;
-            overflow-wrap: anywhere;
-            word-break: break-word;
-        }
+    .myTable td {
+        white-space: normal;
+        overflow-wrap: anywhere;
+        word-break: break-word;
+    }
 </style>
