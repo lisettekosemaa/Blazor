@@ -10,7 +10,7 @@
         @if (!show(p)) continue;
         <TemplateColumn>
             <HeaderTemplate>
-                <a href="@headerHref(p.Name)">@p.Name</a>
+                <a href="@headerHref(p.Name)">@iconed(p.Name)</a>
             </HeaderTemplate>
             <ChildContent Context="y">
                 @(value(p, y))
@@ -34,22 +34,21 @@
     [Inject] private NavigationManager nav { get; set; }
     private int totalCount;
     private Query query;
+    private string icon => query?.DirSort == "asc" ? " ▲" : query?.DirSort == "desc" ? " ▼" : string.Empty;
+    private string iconed(string name) => (query?.SortBy == name) ? name + icon : name;
 
-    protected override async Task OnInitializedAsync()
-    {
+    protected override async Task OnInitializedAsync() {
         if (Repo is null) return;
         var uri = nav.ToAbsoluteUri(nav.Uri);
         query = new UrlParams(uri).Parse();
         totalCount = await Repo.CountAsync(query);
         Entities = (await Repo.GetAsync(query)).AsQueryable();
     }
-    private string value(PropertyInfo p, TEntity e)
-    {
+    private string value(PropertyInfo p, TEntity e) {
         var v = p?.GetValue(e);
         return v?.ToString() ?? string.Empty;
     }
-    private bool show(PropertyInfo p)
-    {
+    private bool show(PropertyInfo p) {
         if (p is null) return false;
         if (p.Name == nameof(NamedEntity.Id)) return false;
         var t = p.PropertyType;
@@ -58,8 +57,14 @@
         if (t.IsClass) return false;
         return true;
     }
-    private string headerHref(string columnName) => 
-        $"{BasePath}?SortBy={columnName}&Page=1&PageSize={query?.PageSize ?? 7}";
+
+    private string headerHref(string name)
+    {
+        var n = ((query?.SortBy == name) && (query?.DirSort == "desc")) ? null : name;
+        var d = query?.SortBy != name ? "asc" : "desc";
+        var r = $"{BasePath}?Page=1&PageSize={query?.PageSize ?? 7}";
+        return (n is null) ? r : r + $"&SortBy={n}&DirSort={d}";
+    }
 }
 
 <style>

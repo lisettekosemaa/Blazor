@@ -44,17 +44,19 @@ public class EfBaseRepo<TContext, TEntity>(TContext c) : IRepo<TEntity>
         var r = key == null 
             ? db.Set<TEntity>().Skip(s).Take(t).AsNoTracking()
             : dir == "desc"
-                ? db.Set<TEntity>().Skip(s).Take(t).OrderByDescending(key).AsNoTracking()
-                : db.Set<TEntity>().Skip(s).Take(t).OrderBy(key).AsNoTracking();
+                ? db.Set<TEntity>().OrderByDescending(key).Skip(s).Take(t).AsNoTracking()
+                : db.Set<TEntity>().OrderBy(key).Skip(s).Take(t).AsNoTracking();
         return await r.ToListAsync();
     }
     private static readonly BindingFlags flags 
         = BindingFlags.Instance | BindingFlags.Public | BindingFlags.IgnoreCase;
-
+    private static PropertyInfo getProp(string propName)
+        => string.IsNullOrEmpty(propName) ? null : typeof(TEntity).GetProperty(propName, flags);
     private static Expression<Func<TEntity, object>> sortBy(string propName)
     {
-        var p = typeof(TEntity).GetProperty(propName, flags);
-        if (p == null) return null;
+        var p = getProp(propName);
+        if (p is null) return null;
+        if (string.IsNullOrEmpty(propName)) return null;
         var parameter = Expression.Parameter(typeof(TEntity), "x");
         var member = Expression.Property(parameter, p);
         var converted = Expression.Convert(member, typeof(object));
